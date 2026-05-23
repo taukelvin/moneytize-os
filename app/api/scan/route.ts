@@ -17,12 +17,11 @@ export async function POST(request: Request) {
     }
 
     /*
-      IMPORTANT:
-      Replace this with your REAL Make.com webhook later
+      PIPEDREAM WEBHOOK
     */
 
     const MAKE_WEBHOOK_URL =
-      "https://hook.eu2.make.com/replace-this-with-your-real-webhook"
+      "https://eolgwors03epqt3.m.pipedream.net"
 
     const response = await fetch(MAKE_WEBHOOK_URL, {
       method: "POST",
