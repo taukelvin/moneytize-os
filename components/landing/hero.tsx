@@ -359,7 +359,7 @@ export function Hero() {
 
                 {/* PAYWALL */}
 
-                <div className="relative overflow-hidden -10">
+                <div className="relative overflow-hidden z-10">
 
                   <div className="p-8 filter blur-md opacity-40 select-none pointer-events-none space-y-5">
 
@@ -399,20 +399,16 @@ export function Hero() {
 
                       </p>
 
-                      <button
-  type="button"
-  onClick={() => {
-    window.open(
-      "https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d",
-      "_blank"
-    )
-  }}
+                      <a
+  href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
+  target="_blank"
+  rel="noopener noreferrer"
   className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all cursor-pointer"
 >
 
   Unlock Full Report — $49
 
-</button>
+</a>
 
                     </div>
 
