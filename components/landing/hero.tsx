@@ -359,7 +359,7 @@ export function Hero() {
 
                 {/* PAYWALL */}
 
-                <div className="relative overflow-hidden">
+                <div className="relative overflow-hidden -10">
 
                   <div className="p-8 filter blur-md opacity-40 select-none pointer-events-none space-y-5">
 
@@ -375,7 +375,7 @@ export function Hero() {
 
                   </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center p-6">
+                  <div className="absolute inset-0 z-20 flex items-center justify-center p-6">
 
                     <div className="max-w-md bg-white/96 backdrop-blur-xl border border-border rounded-3xl p-8 shadow-[0_10px_50px_rgba(0,0,0,0.12)] text-center">
 
@@ -399,16 +399,20 @@ export function Hero() {
 
                       </p>
 
-                      <a
-                        href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all"
-                      >
+                      <button
+  type="button"
+  onClick={() => {
+    window.open(
+      "https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d",
+      "_blank"
+    )
+  }}
+  className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all cursor-pointer"
+>
 
-                        Unlock Full Report — $49
+  Unlock Full Report — $49
 
-                      </a>
+</button>
 
                     </div>
 
@@ -424,25 +428,27 @@ export function Hero() {
 
           {/* SECONDARY CTA */}
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex items-center gap-4 mb-14"
-          >
+<motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.8, delay: 0.4 }}
+  className="flex items-center gap-4 mb-14"
+>
 
-            <button
-              type="button"
-              className="h-12 px-6 rounded-full border border-border hover:bg-secondary flex items-center"
-            >
+  <a
+    href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="h-12 px-6 rounded-full border border-border hover:bg-secondary flex items-center transition-all"
+  >
 
-              <Search className="mr-2 w-4 h-4" />
+    <Search className="mr-2 w-4 h-4" />
 
-              View Demo Report
+    View Demo Report
 
-            </button>
+  </a>
 
-          </motion.div>
+</motion.div>
 
           {/* TRUST */}
 
