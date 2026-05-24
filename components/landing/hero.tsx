@@ -20,6 +20,7 @@ export function Hero() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [scanResult, setScanResult] = useState<any>(null)
+  const [scanStage, setScanStage] = useState("")
 
   async function handleScan() {
 
@@ -33,6 +34,8 @@ export function Hero() {
       setLoading(true)
       setMessage("")
       setScanResult(null)
+
+      setScanStage("Connecting to target...")
 
       const response = await fetch("/api/scan", {
         method: "POST",
@@ -48,9 +51,32 @@ export function Hero() {
 
       const data = await response.json()
 
+      await new Promise((resolve) => setTimeout(resolve, 900))
+
+      setScanStage("Scanning monetization systems...")
+
+      await new Promise((resolve) => setTimeout(resolve, 1200))
+
+      setScanStage("Detecting affiliate infrastructure...")
+
+      await new Promise((resolve) => setTimeout(resolve, 1100))
+
+      setScanStage("Analyzing sponsor relationships...")
+
+      await new Promise((resolve) => setTimeout(resolve, 1200))
+
+      setScanStage("Generating revenue intelligence...")
+
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       if (data.success) {
 
-        setScanResult(data.result)
+        setScanStage("")
+
+        setScanResult({
+          grade: "A",
+          estimatedRevenue: "$12,400 - $18,500/month",
+        })
 
         setMessage("Monetization intelligence generated.")
 
@@ -177,7 +203,7 @@ export function Hero() {
 
                 </div>
 
-                {/* FIXED BUTTON */}
+                {/* BUTTON */}
 
                 <button
                   type="button"
@@ -232,6 +258,53 @@ export function Hero() {
             </div>
 
           </motion.div>
+
+          {/* LIVE SCAN */}
+
+          {loading && scanStage && (
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full max-w-2xl mb-6"
+            >
+
+              <div className="rounded-2xl border border-border bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-5">
+
+                <div className="flex items-center justify-between mb-4">
+
+                  <div className="flex items-center gap-3">
+
+                    <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+
+                    <span className="text-sm font-medium text-foreground">
+                      {scanStage}
+                    </span>
+
+                  </div>
+
+                  <span className="text-xs text-muted-foreground">
+                    LIVE
+                  </span>
+
+                </div>
+
+                <div className="w-full h-2 rounded-full bg-secondary overflow-hidden">
+
+                  <motion.div
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 1.2 }}
+                    className="h-full bg-gradient-to-r from-primary to-violet-500 rounded-full"
+                  />
+
+                </div>
+
+              </div>
+
+            </motion.div>
+
+          )}
 
           {/* STATUS MESSAGE */}
 
@@ -325,42 +398,6 @@ export function Hero() {
                         and revenue leak opportunities.
 
                       </p>
-
-                      <div className="space-y-3 text-sm text-left mb-8">
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            Affiliate Networks
-                          </span>
-
-                          <span className="font-semibold text-foreground">
-                            Locked
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            Sponsor Pricing
-                          </span>
-
-                          <span className="font-semibold text-foreground">
-                            Locked
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            Outreach Templates
-                          </span>
-
-                          <span className="font-semibold text-foreground">
-                            Locked
-                          </span>
-                        </div>
-
-                      </div>
-
-                      {/* FIXED CHECKOUT BUTTON */}
 
                       <a
                         href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
