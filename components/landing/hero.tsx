@@ -1,17 +1,78 @@
 "use client"
 
+import { useState } from "react"
+
 import { motion } from "framer-motion"
+
 import {
   ArrowRight,
   Search,
   ShieldCheck,
   Link2,
+  Loader2,
 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { AnimatedGrid } from "./animated-grid"
 
 export function Hero() {
+
+  const [targetUrl, setTargetUrl] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+  const [scanResult, setScanResult] = useState<any>(null)
+
+  async function handleScan() {
+
+    if (!targetUrl.trim()) {
+      setMessage("Paste a URL first.")
+      return
+    }
+
+    try {
+
+      setLoading(true)
+      setMessage("")
+      setScanResult(null)
+
+      const response = await fetch("/api/scan", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          targetUrl,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+
+        setScanResult(data.result)
+
+        setMessage("Monetization intelligence generated.")
+
+      } else {
+
+        setMessage("System busy. Try again.")
+
+      }
+
+    } catch (error) {
+
+      console.error(error)
+
+      setMessage("Something went wrong.")
+
+    } finally {
+
+      setLoading(false)
+
+    }
+  }
+
   return (
     <section className="relative min-h-[94vh] flex items-center justify-center overflow-hidden pt-20">
 
@@ -63,10 +124,10 @@ export function Hero() {
 
             Discover how much
             <br />
-            money creators 
+            money creators
             <br />
             <span className="text-gradient">
-            are actually making.
+              are actually making.
             </span>
 
           </motion.h1>
@@ -80,9 +141,10 @@ export function Hero() {
             className="max-w-2xl text-base md:text-xl text-muted-foreground leading-relaxed mb-10"
           >
 
-            Paste any creator, YouTube channel, niche website,
-            newsletter, or online business and reveal affiliate systems,
-            sponsorship patterns, hidden funnels, and missed revenue opportunities.
+            Paste any creator, YouTube channel,
+            niche website, newsletter, or online business
+            and reveal affiliate systems, sponsorship patterns,
+            hidden funnels, and missed revenue opportunities.
 
           </motion.p>
 
@@ -92,7 +154,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.3 }}
-            className="w-full max-w-3xl mb-8"
+            className="w-full max-w-3xl mb-6"
           >
 
             <div className="relative rounded-[28px] border border-border/60 bg-white/92 shadow-[0_12px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl p-3 md:p-4">
@@ -107,24 +169,35 @@ export function Hero() {
 
                   <input
                     type="text"
+                    value={targetUrl}
+                    onChange={(e) => setTargetUrl(e.target.value)}
                     placeholder="Paste a YouTube channel, creator page, or website URL..."
                     className="w-full h-14 md:h-16 rounded-2xl border border-border/60 bg-secondary/30 pl-14 pr-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all text-foreground placeholder:text-muted-foreground"
                   />
 
                 </div>
 
-                {/* BUTTON */}
+                {/* FIXED BUTTON */}
 
-                <Button
-                  size="lg"
-                  className="h-14 md:h-16 px-8 rounded-2xl bg-foreground hover:bg-foreground/90 text-white text-sm md:text-base shadow-lg shadow-black/5"
+                <button
+                  type="button"
+                  onClick={handleScan}
+                  className="h-14 md:h-16 px-8 rounded-2xl bg-black hover:bg-black/90 text-white text-sm md:text-base shadow-lg shadow-black/5 flex items-center justify-center font-medium min-w-[220px] transition-all"
                 >
 
-                  Run Free Scan
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                      Scanning...
+                    </>
+                  ) : (
+                    <>
+                      Run Free Scan
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </>
+                  )}
 
-                  <ArrowRight className="ml-2 w-5 h-5" />
-
-                </Button>
+                </button>
 
               </div>
 
@@ -160,6 +233,158 @@ export function Hero() {
 
           </motion.div>
 
+          {/* STATUS MESSAGE */}
+
+          {message && (
+            <p className="text-sm text-muted-foreground mb-8">
+              {message}
+            </p>
+          )}
+
+          {/* RESULTS DASHBOARD */}
+
+          {scanResult && (
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full max-w-5xl mx-auto mb-14"
+            >
+
+              <div className="rounded-[32px] border border-border bg-white/95 backdrop-blur-xl shadow-[0_12px_60px_rgba(0,0,0,0.08)] overflow-hidden">
+
+                {/* TOP */}
+
+                <div className="grid md:grid-cols-2 gap-4 p-6 md:p-8 border-b border-border">
+
+                  <div className="rounded-2xl border border-border bg-secondary/40 p-6 text-left">
+
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                      Profit Stack Score
+                    </p>
+
+                    <h3 className="text-5xl font-bold text-foreground">
+                      {scanResult.grade}
+                    </h3>
+
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-secondary/40 p-6 text-left">
+
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                      Estimated Monthly Revenue
+                    </p>
+
+                    <h3 className="text-2xl md:text-3xl font-bold text-emerald-600 leading-tight">
+                      {scanResult.estimatedRevenue}
+                    </h3>
+
+                  </div>
+
+                </div>
+
+                {/* PAYWALL */}
+
+                <div className="relative overflow-hidden">
+
+                  <div className="p-8 filter blur-md opacity-40 select-none pointer-events-none space-y-5">
+
+                    <div className="h-5 rounded bg-slate-200 w-1/3" />
+
+                    <div className="h-4 rounded bg-slate-200 w-full" />
+
+                    <div className="h-4 rounded bg-slate-200 w-5/6" />
+
+                    <div className="h-4 rounded bg-slate-200 w-4/6" />
+
+                    <div className="h-24 rounded-2xl bg-slate-200 mt-8" />
+
+                  </div>
+
+                  <div className="absolute inset-0 flex items-center justify-center p-6">
+
+                    <div className="max-w-md bg-white/96 backdrop-blur-xl border border-border rounded-3xl p-8 shadow-[0_10px_50px_rgba(0,0,0,0.12)] text-center">
+
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-xs text-muted-foreground mb-5">
+
+                        Premium Intelligence Locked
+
+                      </div>
+
+                      <h4 className="text-2xl font-bold text-foreground mb-4 leading-tight">
+
+                        Unlock the full monetization breakdown
+
+                      </h4>
+
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+
+                        Reveal affiliate networks, sponsor pricing,
+                        outreach templates, hidden funnels,
+                        and revenue leak opportunities.
+
+                      </p>
+
+                      <div className="space-y-3 text-sm text-left mb-8">
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            Affiliate Networks
+                          </span>
+
+                          <span className="font-semibold text-foreground">
+                            Locked
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            Sponsor Pricing
+                          </span>
+
+                          <span className="font-semibold text-foreground">
+                            Locked
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            Outreach Templates
+                          </span>
+
+                          <span className="font-semibold text-foreground">
+                            Locked
+                          </span>
+                        </div>
+
+                      </div>
+
+                      {/* FIXED CHECKOUT BUTTON */}
+
+                      <a
+                        href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all"
+                      >
+
+                        Unlock Full Report — $49
+
+                      </a>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </motion.div>
+
+          )}
+
           {/* SECONDARY CTA */}
 
           <motion.div
@@ -169,17 +394,16 @@ export function Hero() {
             className="flex items-center gap-4 mb-14"
           >
 
-            <Button
-              variant="outline"
-              size="lg"
-              className="h-12 px-6 rounded-full border-border hover:bg-secondary"
+            <button
+              type="button"
+              className="h-12 px-6 rounded-full border border-border hover:bg-secondary flex items-center"
             >
 
               <Search className="mr-2 w-4 h-4" />
 
               View Demo Report
 
-            </Button>
+            </button>
 
           </motion.div>
 
