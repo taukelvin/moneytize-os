@@ -37,20 +37,6 @@ export function Hero() {
 
       setScanStage("Connecting to target...")
 
-      const response = await fetch("/api/scan", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          targetUrl,
-        }),
-      })
-
-      const data = await response.json()
-
       await new Promise((resolve) => setTimeout(resolve, 900))
 
       setScanStage("Scanning monetization systems...")
@@ -69,22 +55,26 @@ export function Hero() {
 
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      if (data.success) {
+      const response = await fetch("/api/scan", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    targetUrl,
+    email: "test@moneytizeos.com",
+  }),
+})
 
-        setScanStage("")
+const data = await response.json()
 
-        setScanResult({
-          grade: "A",
-          estimatedRevenue: "$12,400 - $18,500/month",
-        })
+if (!response.ok) {
+  throw new Error(data.error || "Scan failed")
+}
 
-        setMessage("Monetization intelligence generated.")
+setScanResult(data.result)
 
-      } else {
-
-        setMessage("System busy. Try again.")
-
-      }
+setMessage("Preview generated successfully.")
 
     } catch (error) {
 
@@ -400,11 +390,11 @@ export function Hero() {
                       </p>
 
                       <a
-                        href="https://moneytizeos.lemonsqueezy.com/checkout/buy/af85e481-1259-4a45-be8e-e002ae27821d"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all"
-                      >
+  href={`${process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL}?checkout[custom_data][target_url]=${encodeURIComponent(targetUrl)}&checkout[email]=test@moneytizeos.com`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-full h-14 rounded-2xl bg-black hover:bg-black/90 text-white text-base font-medium flex items-center justify-center transition-all"
+>
 
                         Unlock Full Report — $49
 

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Moneytize OS Intelligence Report</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #020617;
+  color: #F8FAFC;
+}
+
+.page {
+  width: 1200px;
+  min-height: 1550px;
+  margin: 0 auto 60px;
+  padding: 60px;
+  position: relative;
+}
+
+.page-break { page-break-after: always; }
+
+/* HEADER */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #142041;
+  margin-bottom: 48px;
+}
+
+.logo { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.report-meta { text-align: right; font-size: 13px; color: #64748B; }
+.report-id { font-weight: 700; color: #94A3B8; }
+
+/* PAGE LABELS */
+.page-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #3B82F6;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #94A3B8;
+  margin-bottom: 40px;
+}
+
+/* CARDS */
+.card {
+  background: #071028;
+  border: 1px solid #142041;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 12px;
+}
+
+.card-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: #22C55E;
+}
+
+.card-body {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #CBD5E1;
+}
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+/* SCORE HERO */
+.score-hero {
+  background: #071028;
+  border: 1px solid #142041;
+  border-radius: 24px;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-bottom: 28px;
+}
+
+.score-hero h1 { font-size: 52px; font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; }
+.score-hero p { font-size: 18px; line-height: 1.8; color: #CBD5E1; }
+
+.metric-stack { display: flex; flex-direction: column; gap: 16px; }
+
+.metric-card {
+  background: #0B1736;
+  border: 1px solid #1E2D4A;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.metric-label { font-size: 12px; color: #64748B; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.metric-value { font-size: 36px; font-weight: 800; color: #22C55E; }
+.metric-value.blue { color: #3B82F6; }
+.metric-value.grade { font-size: 52px; }
+
+/* BAR */
+.bar { margin-bottom: 20px; }
+.bar-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #94A3B8; }
+.bar-label span:last-child { font-weight: 700; color: #F8FAFC; }
+.bar-track { height: 10px; background: #1E293B; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, #3B82F6, #8B5CF6); border-radius: 999px; }
+.bar-fill.green { background: linear-gradient(90deg, #22C55E, #16A34A); }
+
+/* LIST ITEMS */
+.list-item {
+  display: flex;
+  gap: 16px;
+  padding: 18px;
+  background: #0B1736;
+  border: 1px solid #1E2D4A;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+.list-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3B82F6;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.list-dot.green { background: #22C55E; }
+.list-dot.red { background: #EF4444; }
+.list-dot.yellow { background: #F59E0B; }
+
+.list-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.list-detail { font-size: 14px; color: #94A3B8; line-height: 1.6; }
+.list-badge { font-size: 12px; font-weight: 700; color: #22C55E; margin-top: 6px; }
+
+/* TAG */
+.tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 4px;
+}
+
+.tag.blue { background: #1E3A5F; color: #93C5FD; }
+.tag.green { background: #052e1a; color: #86EFAC; }
+.tag.purple { background: #2D1B69; color: #C4B5FD; }
+.tag.yellow { background: #431407; color: #FDE68A; }
+
+/* PRIORITY */
+.priority-high { color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.priority-medium { color: #F59E0B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.priority-low { color: #22C55E; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+
+/* ACTION WEEK */
+.action-week {
+  background: #071028;
+  border: 1px solid #142041;
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 16px;
+}
+
+.action-week-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.week-badge {
+  background: #1E3A5F;
+  color: #93C5FD;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.week-focus { font-size: 18px; font-weight: 700; }
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #0F1F3D;
+  font-size: 14px;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+.action-item:last-child { border-bottom: none; }
+.action-number { color: #3B82F6; font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+/* CONFIDENTIAL */
+.confidential-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: #1a0a00;
+  border: 1px solid #7c3000;
+  border-radius: 999px;
+  color: #FB923C;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* FOOTER */
+.report-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #142041;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #334155;
+}
+
+@media print {
+  .page { break-after: page; }
+  body { background: #020617; }
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: EXECUTIVE SUMMARY -->
+<div class="page page-break">
+  <div class="report-header">
+    <div>
+      <div class="logo">Moneytize OS</div>
+      <div style="font-size:13px;color:#64748B;margin-top:4px;">Competitor Monetization Intelligence</div>
+    </div>
+    <div class="report-meta">
+      <div class="report-id">REPORT-{{REPORT_ID}}</div>
+      <div>Generated: {{GENERATED_DATE}}</div>
+      <div style="margin-top:8px;"><span class="confidential-badge">⚠ Confidential</span></div>
+    </div>
+  </div>
+
+  <div class="page-label">Page 1 of 12</div>
+  <div class="page-title">Executive Summary</div>
+  <div class="page-subtitle">{{TARGET_URL}}</div>
+
+  <div class="score-hero">
+    <div>
+      <h1>{{EXECUTIVE_SUMMARY}}</h1>
+    </div>
+    <div class="metric-stack">
+      <div class="metric-card">
+        <div class="metric-label">Monetization Grade</div>
+        <div class="metric-value grade">{{GRADE}}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Intelligence Score</div>
+        <div class="metric-value">{{MONETIZATION_SCORE}}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Monthly Revenue Est.</div>
+        <div class="metric-value" style="font-size:22px;">${{MONTHLY_MAX}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Niche Classification</div>
+      <div style="font-size:28px;font-weight:800;">{{NICHE}}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Revenue Leakage Detected</div>
+      <div class="card-value" style="color:#EF4444;">${{REVENUE_LEAKAGE}}/mo</div>
+    </div>
+  </div>
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 2: BUSINESS MODEL -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 2 of 12</div>
+  <div class="page-title">Business Model Analysis</div>
+  <div class="page-subtitle">How this competitor is structured to make money</div>
+
+  <div class="card" style="margin-bottom:28px;">
+    <div class="card-title">Primary Business Model</div>
+    <div class="card-body">{{BUSINESS_MODEL}}</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Conversion Analysis</div>
+    <div class="card-body">{{CONVERSION_ANALYSIS}}</div>
+  </div>
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 3: REVENUE STREAMS -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 3 of 12</div>
+  <div class="page-title">Revenue Streams Detected</div>
+  <div class="page-subtitle">All identified monetization channels</div>
+
+  {{REVENUE_STREAMS_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 4: PRODUCTS AND OFFERS -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 4 of 12</div>
+  <div class="page-title">Products & Offers</div>
+  <div class="page-subtitle">What this competitor is actively selling</div>
+
+  {{PRODUCTS_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 5: LEAD MAGNETS -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 5 of 12</div>
+  <div class="page-title">Lead Generation Funnel</div>
+  <div class="page-subtitle">How they capture and nurture leads</div>
+
+  {{LEAD_MAGNETS_HTML}}
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">Funnel Breakdown</div>
+    <div class="card-body">{{FUNNEL_BREAKDOWN}}</div>
+  </div>
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 6: TECHNOLOGY STACK -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 6 of 12</div>
+  <div class="page-title">Technology Stack</div>
+  <div class="page-subtitle">Tools and platforms powering their operation</div>
+
+  {{TECH_STACK_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 7: COMPETITOR STRENGTHS -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 7 of 12</div>
+  <div class="page-title">Competitor Strengths</div>
+  <div class="page-subtitle">What they do exceptionally well</div>
+
+  {{STRENGTHS_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 8: COMPETITOR WEAKNESSES -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 8 of 12</div>
+  <div class="page-title">Competitor Weaknesses</div>
+  <div class="page-subtitle">Where they are vulnerable or leaving money behind</div>
+
+  {{WEAKNESSES_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 9: REVENUE OPPORTUNITIES -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 9 of 12</div>
+  <div class="page-title">Revenue Opportunities</div>
+  <div class="page-subtitle">Gaps you can exploit in their monetization strategy</div>
+
+  {{OPPORTUNITIES_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 10: WHAT TO COPY -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 10 of 12</div>
+  <div class="page-title">What To Copy</div>
+  <div class="page-subtitle">Proven tactics worth replicating immediately</div>
+
+  {{COPY_TACTICS_HTML}}
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 11: SCORECARD -->
+<div class="page page-break">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 11 of 12</div>
+  <div class="page-title">Intelligence Scorecard</div>
+  <div class="page-subtitle">Monetization performance across all dimensions</div>
+
+  <div class="card">
+    <div class="bar">
+      <div class="bar-label"><span>Monetization Depth</span><span>{{SCORE_MONETIZATION}}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:{{SCORE_MONETIZATION}}%"></div></div>
+    </div>
+    <div class="bar">
+      <div class="bar-label"><span>Lead Generation</span><span>{{SCORE_LEADS}}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:{{SCORE_LEADS}}%"></div></div>
+    </div>
+    <div class="bar">
+      <div class="bar-label"><span>Product Diversification</span><span>{{SCORE_PRODUCTS}}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:{{SCORE_PRODUCTS}}%"></div></div>
+    </div>
+    <div class="bar">
+      <div class="bar-label"><span>Technology Stack</span><span>{{SCORE_TECH}}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:{{SCORE_TECH}}%"></div></div>
+    </div>
+    <div class="bar">
+      <div class="bar-label"><span>Funnel Optimization</span><span>{{SCORE_FUNNEL}}%</span></div>
+      <div class="bar-track"><div class="bar-fill green" style="width:{{SCORE_FUNNEL}}%"></div></div>
+    </div>
+    <div class="bar">
+      <div class="bar-label"><span>Affiliate Infrastructure</span><span>{{SCORE_AFFILIATE}}%</span></div>
+      <div class="bar-track"><div class="bar-fill green" style="width:{{SCORE_AFFILIATE}}%"></div></div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="card" style="text-align:center;">
+      <div class="card-title">Overall Grade</div>
+      <div style="font-size:64px;font-weight:800;color:#22C55E;">{{GRADE}}</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-title">Revenue Potential</div>
+      <div style="font-size:22px;font-weight:800;color:#3B82F6;">${{MONTHLY_MIN}}–${{MONTHLY_MAX}}</div>
+      <div style="font-size:13px;color:#64748B;margin-top:4px;">per month</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-title">Leakage Detected</div>
+      <div style="font-size:28px;font-weight:800;color:#EF4444;">${{REVENUE_LEAKAGE}}</div>
+      <div style="font-size:13px;color:#64748B;margin-top:4px;">per month</div>
+    </div>
+  </div>
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+<!-- PAGE 12: 30-DAY ACTION PLAN -->
+<div class="page">
+  <div class="report-header">
+    <div class="logo">Moneytize OS</div>
+    <div class="report-meta"><div class="report-id">REPORT-{{REPORT_ID}}</div></div>
+  </div>
+
+  <div class="page-label">Page 12 of 12</div>
+  <div class="page-title">30-Day Action Plan</div>
+  <div class="page-subtitle">Your competitive intelligence execution roadmap</div>
+
+  {{ACTION_PLAN_HTML}}
+
+  <div class="card" style="margin-top:28px;text-align:center;background:#052e1a;border-color:#166534;">
+    <div style="font-size:18px;font-weight:700;color:#22C55E;margin-bottom:8px;">Ready to go deeper?</div>
+    <div style="font-size:15px;color:#86EFAC;">Monitor this competitor weekly with Moneytize OS Monitoring</div>
+    <div style="font-size:13px;color:#64748B;margin-top:8px;">moneytizeos.com</div>
+  </div>
+
+  <div class="report-footer">
+    <span>Moneytize OS • Monetization Intelligence Platform</span>
+    <span>moneytizeos.com</span>
+  </div>
+</div>
+
+</body>
+</html>
